@@ -17,7 +17,7 @@ class Options():
         parser.add_argument('--labels_folder', type=str, default='./Data_folder/labels')
         parser.add_argument('--increase_factor_data',  default=1, help='Increase data number per epoch')
         parser.add_argument('--preload', type=str, default=None)
-        parser.add_argument('--gpu_ids', type=str, default='2,3', help='gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU')
+        parser.add_argument('--gpu_ids', type=str, default='0', help='gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU')
         parser.add_argument('--workers', default=8, type=int, help='number of data loading workers')
 
         # dataset parameters
