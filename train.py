@@ -90,7 +90,7 @@ def main():
 
     # Transforms list
 
-    if opt.resolution is not None:
+    if opt.resolution != None:
         train_transforms = [
             LoadImaged(keys=['image', 'label']),
             AddChanneld(keys=['image', 'label']),
@@ -205,16 +205,16 @@ def main():
     test_loader = DataLoader(check_val, batch_size=1, num_workers=opt.workers, collate_fn=list_data_collate, pin_memory=False)
 
     # build the network
-    if opt.network is 'nnunet':
+    if opt.network == 'nnunet':
         net = build_net()  # nn build_net
-    elif opt.network is 'unetr':
+    elif opt.network == 'unetr':
         net = build_UNETR() # UneTR
     net.cuda()
 
     if num_gpus > 1:
         net = torch.nn.DataParallel(net)
 
-    if opt.preload is not None:
+    if opt.preload == not None:
         net.load_state_dict(torch.load(opt.preload))
 
     dice_metric = DiceMetric(include_background=True, reduction="mean", get_not_nans=False)
@@ -224,12 +224,12 @@ def main():
     torch.backends.cudnn.benchmark = opt.benchmark
 
 
-    if opt.network is 'nnunet':
+    if opt.network == 'nnunet':
 
         optim = torch.optim.SGD(net.parameters(), lr=opt.lr, momentum=0.99, weight_decay=3e-5, nesterov=True,)
         net_scheduler = torch.optim.lr_scheduler.LambdaLR(optim, lr_lambda=lambda epoch: (1 - epoch / opt.epochs) ** 0.9)
 
-    elif opt.network is 'unetr':
+    elif opt.network == 'unetr':
 
         optim = torch.optim.AdamW(net.parameters(), lr=1e-4, weight_decay=1e-5)
 
@@ -260,7 +260,7 @@ def main():
         epoch_loss /= step
         epoch_loss_values.append(epoch_loss)
         print(f"epoch {epoch + 1} average loss: {epoch_loss:.4f}")
-        if opt.network is 'nnunet':
+        if opt.network == 'nnunet':
             update_learning_rate(net_scheduler, optim)
 
         if (epoch + 1) % val_interval == 0:
